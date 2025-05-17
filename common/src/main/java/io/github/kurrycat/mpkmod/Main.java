@@ -91,6 +91,7 @@ public class Main implements MPKModule {
         EventAPI.addListener(
                 new EventAPI.EventListener<OnKeyInputEvent>(event -> {
                     if (Keyboard.getPressedButtons().contains(InputConstants.KEY_F3)) {
+                        // reload modules
                         if (event.keyCode == InputConstants.KEY_M) {
                             if (Keyboard.getPressedButtons().contains(InputConstants.KEY_LSHIFT)) {
                                 API.LOGGER.info("Closing all mpkmodules...");
@@ -99,6 +100,7 @@ public class Main implements MPKModule {
                                 API.LOGGER.info("Reloading mpkmodules...");
                                 ModuleManager.reloadAllModules();
                             }
+                        // copy player location to clipboard
                         } else if (event.keyCode == InputConstants.KEY_C) {
                             if (Player.getLatest() == null) return;
                             Player p = Player.getLatest();
@@ -153,17 +155,7 @@ public class Main implements MPKModule {
                             if (!highlightLandingBlocks) return;
 
                             Profiler.startSection("renderLBOverlays");
-                            LandingBlockGuiScreen.lbs.forEach(lb -> {
-                                        if (lb.enabled || lb.highlight && lb.boundingBox != null)
-                                            Renderer3D.drawBox(
-                                                    lb.boundingBox.expand(0.005D),
-                                                    lb.highlight ?
-                                                            new Color(98, 255, 74, 157) :
-                                                            new Color(255, 68, 68, 157),
-                                                    e.partialTicks
-                                            );
-                                    }
-                            );
+                            LandingBlockGuiScreen.lbs.forEach(lb -> lb.render(e.partialTicks));
                             Profiler.endSection();
                         },
                         Event.EventType.RENDER_WORLD_OVERLAY

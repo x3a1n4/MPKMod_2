@@ -2,12 +2,13 @@ package io.github.kurrycat.mpkmod.landingblock;
 
 import io.github.kurrycat.mpkmod.compatibility.API;
 import io.github.kurrycat.mpkmod.compatibility.MCClasses.Player;
+import io.github.kurrycat.mpkmod.compatibility.MCClasses.Renderer3D;
 import io.github.kurrycat.mpkmod.gui.infovars.InfoString;
 import io.github.kurrycat.mpkmod.util.BoundingBox3D;
 import io.github.kurrycat.mpkmod.util.Vector3D;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,20 +16,37 @@ import java.util.stream.Collectors;
 public class LandingBlock {
     public static final int MAX_OFFSETS_SAVED = 500;
     public LandingMode landingMode = LandingMode.LAND;
+    // TODO: add setter to show change in color
+
     @InfoString.Field
     public BoundingBox3D boundingBox;
     public boolean enabled = true;
-    public boolean highlight = false;
+    public boolean highlight = false; // not accessed in this file
 
     public List<Vector3D> offsets = new ArrayList<>();
+
+    // Personal bests
+    // Seemingly unused
     @InfoString.Field
     public Vector3D pb = null;
+
     @InfoString.Field
     public Vector3D pbX = null;
+
     @InfoString.Field
     public Vector3D pbZ = null;
 
     public long lastTimeOffsetSaved = 0;
+
+    // colours
+    // TODO: make changeable via config
+    private static Map<LandingMode, Color> DRAW_COLORS = new HashMap<LandingMode, Color>(){{
+        put(LandingMode.LAND, new Color(255, 68, 68, 157));
+        put(LandingMode.HIT, new Color(255, 162, 68, 157));
+        put(LandingMode.Z_NEO, new Color(255, 234, 0, 158));
+        put(LandingMode.ENTER, new Color(107, 255, 74, 157));
+    }};
+    private static Color HIGHLIGHT_COLOUR = new Color(213, 199, 199, 157);
 
     public static List<LandingBlock> asLandingBlocks(List<BoundingBox3D> collisionBoundingBoxes) {
         return collisionBoundingBoxes.stream().map(LandingBlock::new).collect(Collectors.toCollection(ArrayList<LandingBlock>::new));
@@ -42,6 +60,22 @@ public class LandingBlock {
     public Vector3D getOffset() {
         if (offsets.size() == 0) return null;
         return offsets.get(offsets.size() - 1);
+    }
+
+    // partialTicks needed because of minecraft interpolation
+    // see Renderer3D.java
+    public void render(float partialTicks){
+        if (enabled || highlight && boundingBox != null){
+            Color drawColour = DRAW_COLORS.get(landingMode);
+
+            if (highlight) drawColour = HIGHLIGHT_COLOUR;
+
+            Renderer3D.drawBox(
+                    boundingBox.expand(0.005D),
+                    drawColour,
+                    partialTicks
+            );
+        }
     }
 
     public Vector3D saveOffsetIfInRange() {

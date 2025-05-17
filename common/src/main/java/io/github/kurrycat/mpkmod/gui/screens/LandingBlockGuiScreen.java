@@ -70,6 +70,7 @@ public class LandingBlockGuiScreen extends ComponentScreen {
     }
 
     public static class LBList extends ScrollableList<LBListItem> {
+        // Initialize landing block list
         public LBList(Vector2D pos, Vector2D size) {
             this.setPos(pos);
             this.setSize(size);
@@ -100,15 +101,17 @@ public class LandingBlockGuiScreen extends ComponentScreen {
             }
         }
 
+        // called every frame
         @Override
         public void render(Vector2D mouse) {
             super.render(mouse);
             for (LBListItem item : getItems())
                 item.landingBlock.highlight = false;
 
+            // this is where it highlights landing blocks
             Pair<LBListItem, Vector2D> p = getItemAndRelMousePosUnderMouse(mouse);
             if (p != null)
-                p.first.landingBlock.highlight = true;
+                p.first.landingBlock.highlight = true; // and it just sets the highlight to true
 
             components.forEach(c -> c.render(mouse));
         }
@@ -207,6 +210,7 @@ public class LandingBlockGuiScreen extends ComponentScreen {
             return collapsed ? 21 : 50;
         }
 
+        // passed the mouse position as an input
         public void render(int index, Vector2D pos, Vector2D size, Vector2D mouse) {
             Renderer2D.drawRectWithEdge(pos, size, 1, lbListColorBg, lbListColorItemEdge);
 
@@ -218,6 +222,7 @@ public class LandingBlockGuiScreen extends ComponentScreen {
                 fields[i].setWidth(size.getX() / 3);
             }
 
+            // show collapsed view
             if (collapsed)
                 FontRenderer.drawString(
                         landingBlock.boundingBox.getMin() + " - " + landingBlock.boundingBox.getMax(),
@@ -228,6 +233,7 @@ public class LandingBlockGuiScreen extends ComponentScreen {
                         Color.WHITE,
                         false
                 );
+            // show all fields
             else
                 for (int i = 0; i < fields.length; i++) {
                     fields[i].setPos(pos.add(
@@ -238,22 +244,26 @@ public class LandingBlockGuiScreen extends ComponentScreen {
                     fields[i].render(mouse);
                 }
 
+            // show enabled button (on left side)
             enabled.setPos(pos.add(size.getX() / 16 - enabled.getDisplayedSize().getX(), size.getY() / 2 - 5.5).round());
             enabled.render(mouse);
 
+            // show collapse button, just text as a v or ^ character
             collapseButton.setText(collapsed ? "v" : "^");
-            collapseButton.textOffset = collapsed ? Vector2D.ZERO : new Vector2D(0, 3);
+            collapseButton.textOffset = collapsed ? Vector2D.ZERO : new Vector2D(0, 3); // adjust text to centre
             collapseButton.setPos(pos.add(size.getX() - size.getX() / 16, size.getY() / (collapsed ? 2 : 3) - 5.5).round());
             collapseButton.render(mouse);
 
+            // delete button on right: red x
             deleteButton.setPos(pos.add(size.getX() - size.getX() / 8, size.getY() / (collapsed ? 2 : 3) - 5.5).round());
             deleteButton.render(mouse);
 
+            // show the landing mode button if not collapsed
             landingModeButton.setPos(pos.add(size.getX() - size.getX() / 8, size.getY() / 3 * 2 - 5.5).round());
             landingModeButton.setSize(new Vector2D(size.getX() / 16 + collapseButton.getDisplayedSize().getX(), 11));
             landingModeButton.enabled = !collapsed;
             landingModeButton.setText(landingBlock.landingMode.toString());
-            if (!collapsed) landingModeButton.render(mouse);
+            if (!collapsed) landingModeButton.render(mouse); // only render if not collapsed
         }
 
         public boolean handleMouseInput(Mouse.State state, Vector2D mousePos, Mouse.Button button) {

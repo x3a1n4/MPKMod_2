@@ -46,6 +46,9 @@ public class CheckButton extends Component implements MouseInputListener {
         isChecked = checked;
     }
 
+    // mouse isn't actually used here, but it could be with an if (contains(mouse)) of some kind
+    // the cleanest way would be to make it extend Button
+    // TODO see comment above, see Button.render(...)
     public void render(Vector2D mouse) {
         Color color = enabled ? normalColor : disabledColor;
         Renderer2D.drawRectWithEdge(getDisplayedPos(), getDisplayedSize(), 1, color, color);

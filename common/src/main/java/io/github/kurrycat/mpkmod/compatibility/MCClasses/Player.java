@@ -54,6 +54,8 @@ public class Player {
     public BoundingBox3D boundingBox = null;
 
 
+    // There's no way this is never used
+    // TODO: this is seemingly the only place where pb (personal best) is accessed
     @InfoString.Getter
     public static LandingBlock getLatestLB() {
         return LandingBlockGuiScreen.lbs.stream()
