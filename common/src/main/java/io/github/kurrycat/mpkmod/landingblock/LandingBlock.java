@@ -173,7 +173,6 @@ public class LandingBlock {
                 return playerBB.minY() < boundingBox.maxY() && playerBB.minY() >= boundingBox.minY() && playerBB.minY() < lastPlayerBB.minY();
             case JUMP:
                 // return true on tick where jump is pressed and on ground
-                // TODO: maybe tick after?
                 Player.KeyInput keyInput = Player.getLatest().keyInput;
                 boolean onGround = Objects.requireNonNull(Player.getBeforeLatest()).onGround;
 
@@ -182,9 +181,7 @@ public class LandingBlock {
 
                 // API.LOGGER.info(API.DISCORD_RPC_MARKER, String.format("Is jumping: %s %s %s", keyInput.jump , onGround , onBlock));
                 return keyInput.jump && onGround && onBlock;
-                // TODO: highlight in log to represent a jump, not a landing
             case OBSTACLE:
-                // TODO: highlight in log to represent a miss
                 // We only return true on "tight" passes
                 // step 1: get "sides" to bounding box
                 Vector2D side = boundingBox.getXZSide(playerBB);
