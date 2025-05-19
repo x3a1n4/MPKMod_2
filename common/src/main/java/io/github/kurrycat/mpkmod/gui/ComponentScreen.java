@@ -32,10 +32,10 @@ public abstract class ComponentScreen extends MPKGuiScreen implements PaneHolder
     private Component lastClicked = null;
     private Vector2D holdingSetPosOffset = null;
 
-    public void postMessage(String receiverID, String content, boolean highlighted) {
+    public void postMessage(String receiverID, String content, Color highlightColor) {
         MessageQueue q = MessageQueue.getReceiverFor(receiverID, ItrUtil.getAllOfType(MessageQueue.class, movableComponents));
         if (q != null)
-            q.postMessage(content, highlighted);
+            q.postMessage(content, highlightColor);
     }
 
     public void onGuiInit() {

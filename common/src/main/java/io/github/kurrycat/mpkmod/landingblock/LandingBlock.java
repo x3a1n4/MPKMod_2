@@ -1,10 +1,12 @@
 package io.github.kurrycat.mpkmod.landingblock;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.kurrycat.mpkmod.compatibility.API;
 import io.github.kurrycat.mpkmod.compatibility.MCClasses.Player;
 import io.github.kurrycat.mpkmod.compatibility.MCClasses.Renderer3D;
 import io.github.kurrycat.mpkmod.gui.infovars.InfoString;
 import io.github.kurrycat.mpkmod.util.BoundingBox3D;
+import io.github.kurrycat.mpkmod.util.MathUtil;
 import io.github.kurrycat.mpkmod.util.Vector2D;
 import io.github.kurrycat.mpkmod.util.Vector3D;
 import jdk.nashorn.internal.objects.annotations.Setter;
@@ -13,6 +15,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.github.kurrycat.mpkmod.Main.mainGUI;
 
 @InfoString.DataClass
 public class LandingBlock {
@@ -52,6 +56,18 @@ public class LandingBlock {
     }};
     private static Color HIGHLIGHT_COLOUR = new Color(213, 199, 199, 157);
 
+    // TODO: make json property
+    @JsonProperty
+    public static Color messageBackgroundColor = new Color(31, 31, 31, 47);
+    @JsonProperty
+    public static Color messageHighlightBackgroundColor = new Color(98, 255, 74, 157);
+    @JsonProperty
+    public static Color messageHighlightJumpColor = new Color(74, 125, 255, 157);
+    @JsonProperty
+    public static Color messageHighlightObstXColor = new Color(255, 240, 74, 157);
+    @JsonProperty
+    public static Color messageHighlightObstZColor = new Color(189, 74, 255, 157);
+
     private static final double RENDER_EXPANSION_AMOUNT = 0.005D;
 
     public static List<LandingBlock> asLandingBlocks(List<BoundingBox3D> collisionBoundingBoxes) {
@@ -84,9 +100,9 @@ public class LandingBlock {
         }
     }
 
-    public Vector3D saveOffsetIfInRange() {
+    public void saveAndPostOffsetIfInRange() {
         // note: must be called before getPlayerBB
-        if (!isTryingToLandOn()) return null; // if not trying to land on, return null
+        if (!isTryingToLandOn()) return; // if not trying to land on, return null
 
         /*
         BoundingBox3D playerBB = landingMode.getPlayerBB(this); // get the player BB
@@ -95,7 +111,7 @@ public class LandingBlock {
         Vector3D offset = boundingBox.distanceTo(playerBB).mult(-1D); // get the distance, mult -1 as positive should mean landing
         */
         Vector3D offset = landingMode.getOffset(boundingBox).mult(-1D);
-        if (offset.getX() <= -0.3F || offset.getZ() <= -0.3F) return null; // if too far away, stop
+        if (offset.getX() <= -0.3F || offset.getZ() <= -0.3F) return; // if too far away, stop
 
         offsets.add(offset);
         while (offsets.size() > MAX_OFFSETS_SAVED)
@@ -110,7 +126,30 @@ public class LandingBlock {
 
         lastTimeOffsetSaved = API.tickTime;
 
-        return offset.copy();
+        // get highlight color
+        Color highlightColor = new Color(0, 0, 0, 255);
+        if (offset.getX() > 0 && offset.getZ() > 0){
+            highlightColor = messageHighlightBackgroundColor;
+
+            if (landingMode == LandingMode.JUMP) highlightColor = messageHighlightJumpColor;
+        }else{
+            highlightColor = messageBackgroundColor;
+        }
+
+        if (landingMode == LandingMode.OBSTACLE){
+            if (landingMode.isZFacing) {highlightColor = messageHighlightObstZColor;}
+            else {highlightColor = messageHighlightObstXColor;}
+        }
+
+        // Post the message
+        if (mainGUI != null)
+            // This is the only time a message is posted
+            mainGUI.postMessage(
+                    "offset",
+                    MathUtil.formatDecimals(offset.getX(), 5, false) +
+                            ", " + MathUtil.formatDecimals(offset.getZ(), 5, false),
+                    highlightColor
+            ); // show input
     }
 
     public boolean isTryingToLandOn() {

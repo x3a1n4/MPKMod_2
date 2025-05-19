@@ -21,7 +21,6 @@ import io.github.kurrycat.mpkmod.modules.ModuleManager;
 import io.github.kurrycat.mpkmod.ticks.TimingStorage;
 import io.github.kurrycat.mpkmod.util.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,16 +166,7 @@ public class Main implements MPKModule {
                 EventAPI.EventListener.onTickEnd(
                         e -> {
                             Profiler.startSection("calculateLBOffsets");
-                            LandingBlockGuiScreen.calculateLBOffsets()
-                                    .forEach(offset -> {
-                                        if (mainGUI != null)
-                                            mainGUI.postMessage(
-                                                    "offset",
-                                                    MathUtil.formatDecimals(offset.getX(), 5, false) +
-                                                            ", " + MathUtil.formatDecimals(offset.getZ(), 5, false),
-                                                    offset.getX() > 0 && offset.getZ() > 0
-                                            ); // show input
-                                    });
+                            LandingBlockGuiScreen.calculateAndPostLBOffsets();
                             Profiler.endSection();
                             Profiler.startSection("tickInputHistories");
                             for (Component component : mainGUI.movableComponents) {

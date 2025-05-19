@@ -7,7 +7,6 @@ import io.github.kurrycat.mpkmod.compatibility.MCClasses.FontRenderer;
 import io.github.kurrycat.mpkmod.compatibility.MCClasses.Renderer2D;
 import io.github.kurrycat.mpkmod.util.ColorUtil;
 import io.github.kurrycat.mpkmod.util.MathUtil;
-import io.github.kurrycat.mpkmod.util.Mouse;
 import io.github.kurrycat.mpkmod.util.Vector2D;
 
 import java.awt.*;
@@ -61,9 +60,9 @@ public class MessageQueue extends ResizableComponent {
         renderHoverEdges(mouse);
     }
 
-    public void postMessage(String content, boolean highlighted) {
+    public void postMessage(String content, Color highlightColor) {
         Message message = new Message(this, content);
-        if (highlighted) message.highlight();
+        message.setHighlightColor(highlightColor);
         messages.add(0, message);
     }
 
@@ -76,7 +75,7 @@ public class MessageQueue extends ResizableComponent {
         public String content;
         public Instant created;
         public MessageQueue parent;
-        public boolean highlighted = false;
+        public Color highlightColor = new Color(0, 0, 0, 255);
 
         /**
          * max age in ms
@@ -97,7 +96,7 @@ public class MessageQueue extends ResizableComponent {
             long age = getAge();
             double fadeOutAlpha = age < maxAge - fadeOutTime ? 255 : MathUtil.map(maxAge - Math.min(age, maxAge), fadeOutTime, 0, 255, 0);
 
-            Color backgroundColor = highlighted ? parent.messageHighlightBackgroundColor : parent.messageBackgroundColor;
+            Color backgroundColor = highlightColor;
 
             Renderer2D.drawRect(pos, size,
                     ColorUtil.withAlpha(
@@ -117,8 +116,8 @@ public class MessageQueue extends ResizableComponent {
             return ChronoUnit.MILLIS.between(created, Instant.now());
         }
 
-        public void highlight() {
-            this.highlighted = true;
+        public void setHighlightColor(Color color) {
+            this.highlightColor = color;
         }
     }
 }

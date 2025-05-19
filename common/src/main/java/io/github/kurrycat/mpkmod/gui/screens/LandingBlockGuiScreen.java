@@ -24,14 +24,10 @@ public class LandingBlockGuiScreen extends ComponentScreen {
     private LBList lbList;
 
     // ran every tick end
-    public static List<Vector3D> calculateLBOffsets() {
-        List<Vector3D> returnOffsets = new ArrayList<>();
+    public static void calculateAndPostLBOffsets() {
         lbs.forEach(lb -> {
-            Vector3D o = lb.saveOffsetIfInRange();
-            if (o != null)
-                returnOffsets.add(o);
+            lb.saveAndPostOffsetIfInRange();
         });
-        return returnOffsets;
     }
 
     @Override
