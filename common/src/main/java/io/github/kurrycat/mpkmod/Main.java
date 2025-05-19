@@ -162,6 +162,7 @@ public class Main implements MPKModule {
                 )
         );
 
+        // Tick end
         EventAPI.addListener(
                 EventAPI.EventListener.onTickEnd(
                         e -> {
@@ -174,7 +175,7 @@ public class Main implements MPKModule {
                                                     MathUtil.formatDecimals(offset.getX(), 5, false) +
                                                             ", " + MathUtil.formatDecimals(offset.getZ(), 5, false),
                                                     offset.getX() > 0 && offset.getZ() > 0
-                                            );
+                                            ); // show input
                                     });
                             Profiler.endSection();
                             Profiler.startSection("tickInputHistories");
@@ -183,6 +184,7 @@ public class Main implements MPKModule {
                                 ((InputHistory) component).onTick();
                             }
                             Profiler.endSection();
+
                         }
                 )
         );

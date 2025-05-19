@@ -93,6 +93,13 @@ public class BoundingBox3D implements FormatDecimals {
         );
     }
 
+    public Vector2D getXZSide(BoundingBox3D other) {
+        return new Vector2D(
+                other.minX() > this.maxX() ? 1 : other.maxX() < this.minX() ? -1 : 0,
+                other.minZ() > this.maxZ() ? 1 : other.maxZ() < this.minZ() ? -1 : 0
+        );
+    }
+
     public double midX() {
         return (minX() + maxX()) / 2D;
     }
@@ -151,6 +158,11 @@ public class BoundingBox3D implements FormatDecimals {
     @InfoString.Getter
     public Vector3D getMax() {
         return max;
+    }
+
+    @InfoString.Getter
+    public Vector3D getMid() {
+        return min.add(max).mult(0.5D);
     }
 
     @Override

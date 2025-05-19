@@ -23,6 +23,7 @@ public class LandingBlockGuiScreen extends ComponentScreen {
 
     private LBList lbList;
 
+    // ran every tick end
     public static List<Vector3D> calculateLBOffsets() {
         List<Vector3D> returnOffsets = new ArrayList<>();
         lbs.forEach(lb -> {

@@ -28,6 +28,11 @@ public class Vector2D implements Copyable<Vector2D>, FormatDecimals {
         this.y = vector2D.y;
     }
 
+    public Vector2D(Vector3D vector3D) {
+        this.x = vector3D.getX();
+        this.y = vector3D.getZ();
+    }
+
     @JsonIgnore
     public float getXF() {
         return (float) x;
