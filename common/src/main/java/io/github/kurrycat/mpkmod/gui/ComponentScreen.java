@@ -200,6 +200,22 @@ public abstract class ComponentScreen extends MPKGuiScreen implements PaneHolder
                     addComponent(path);
                     menu.close();
                 }));
+                newLabelMenu.addComponent(new Button("Add UniversalInputDisplay (egghacks)", b -> {
+                    if (b != Mouse.Button.LEFT) return;
+                    UniversalInputDisplay universalInputDisplay = new UniversalInputDisplay();
+                    universalInputDisplay.setPos(mouse);
+                    universalInputDisplay.setSize(new Vector2D(40, 40));
+                    addComponent(universalInputDisplay);
+                    menu.close();
+                }));
+                newLabelMenu.addComponent(new Button("Add UniversalYawDisplay (egghacks)", b -> {
+                    if (b != Mouse.Button.LEFT) return;
+                    UniversalYawDisplay universalYawDisplay = new UniversalYawDisplay();
+                    universalYawDisplay.setPos(mouse);
+                    universalYawDisplay.setSize(new Vector2D(40, 40));
+                    addComponent(universalYawDisplay);
+                    menu.close();
+                }));
 
                 menu.addSubMenu(new Button("Add Label"), newLabelMenu);
                 openPane(menu, mouse);
