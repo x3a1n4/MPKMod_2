@@ -95,8 +95,8 @@ public class BoundingBox3D implements FormatDecimals {
 
     public Vector2D getXZSide(BoundingBox3D other) {
         return new Vector2D(
-                other.minX() > this.maxX() ? 1 : other.maxX() < this.minX() ? -1 : 0,
-                other.minZ() > this.maxZ() ? 1 : other.maxZ() < this.minZ() ? -1 : 0
+                other.minX() >= this.maxX() ? 1 : other.maxX() <= this.minX() ? -1 : 0,
+                other.minZ() >= this.maxZ() ? 1 : other.maxZ() <= this.minZ() ? -1 : 0
         );
     }
 

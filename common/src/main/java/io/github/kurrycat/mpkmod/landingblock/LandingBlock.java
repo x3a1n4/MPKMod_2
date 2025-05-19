@@ -111,8 +111,9 @@ public class LandingBlock {
         Vector3D offset = boundingBox.distanceTo(playerBB).mult(-1D); // get the distance, mult -1 as positive should mean landing
         */
         Vector3D offset = landingMode.getOffset(boundingBox).mult(-1D);
-        if (offset.getX() <= -0.3F || offset.getZ() <= -0.3F) return; // if too far away, stop
+        if ((offset.getX() <= -0.3F || offset.getZ() <= -0.3F) && landingMode != LandingMode.OBSTACLE) return; // if too far away, stop
 
+        // what is this for?
         offsets.add(offset);
         while (offsets.size() > MAX_OFFSETS_SAVED)
             offsets.remove(0);
@@ -189,6 +190,8 @@ public class LandingBlock {
                 Vector2D side = boundingBox.getXZSide(playerBB);
                 Vector2D lastSide = boundingBox.getXZSide(lastPlayerBB);
                 Vector2D lastLastSide = boundingBox.getXZSide(lastLastPlayerBB);
+
+                API.LOGGER.info(API.DISCORD_RPC_MARKER, String.format("Side: %s %s %s", side , lastSide , lastLastSide));
 
                 // X facing check
                 // flip lastSide to -, + corner (so that we are going around the bottom right
