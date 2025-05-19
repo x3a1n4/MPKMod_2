@@ -33,6 +33,13 @@ public class LandingBlock {
 
     // Personal bests
     // Seemingly unused
+    // UPDATE: https://discord.com/channels/819737524372504587/819738876145958943/1374133832709570702
+    /*
+    i looked a bit, not sure if youre still confused about the @InfoString stuff
+    thats what can be accessed in labels
+    using reflection
+    thats why it has no usages
+     */
     @InfoString.Field
     public Vector3D pb = null;
 
@@ -111,7 +118,9 @@ public class LandingBlock {
         Vector3D offset = boundingBox.distanceTo(playerBB).mult(-1D); // get the distance, mult -1 as positive should mean landing
         */
         Vector3D offset = landingMode.getOffset(boundingBox).mult(-1D);
-        if ((offset.getX() <= -0.3F || offset.getZ() <= -0.3F) && landingMode != LandingMode.OBSTACLE) return; // if too far away, stop
+        if ((offset.getX() <= -0.30 || offset.getZ() <= -0.30)) return; // if too far away, stop
+        if (landingMode == LandingMode.OBSTACLE)
+            if ((offset.getX() >= -0.0D || offset.getZ() >= -0.0D)) return; // can't be inside blocks in obstacle
 
         // what is this for?
         offsets.add(offset);
@@ -205,6 +214,8 @@ public class LandingBlock {
                     lastLastSide.setY(lastLastSide.getY() * -1);
                     transform.setY(-1);
                 }
+
+                // TODO: check to make sure it's player movement and not teleporting
 
                 // now check X
                 if (side.getX() > lastSide.getX() && lastSide.getY() > lastLastSide.getY()) {

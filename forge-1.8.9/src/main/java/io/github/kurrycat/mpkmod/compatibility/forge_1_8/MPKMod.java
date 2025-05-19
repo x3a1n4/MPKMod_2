@@ -73,7 +73,7 @@ public class MPKMod {
     }
 
     private void registerKeyBindings() {
-        for (KeyBinding k : Minecraft.getMinecraft().gameSettings.keyBindings) {
+        for (KeyBinding k : Minecraft.getMinecraft().gameSettings.keyBindings) { // you need the jar from top-level build/libs if NoSuchMethodHere
             new io.github.kurrycat.mpkmod.compatibility.MCClasses.KeyBinding(
                     () -> GameSettings.getKeyDisplayString(k.getKeyCode()),
                     k.getKeyDescription(),
