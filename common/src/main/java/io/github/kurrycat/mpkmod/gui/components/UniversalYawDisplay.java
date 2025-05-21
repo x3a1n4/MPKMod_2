@@ -20,6 +20,7 @@ public class UniversalYawDisplay extends ResizableComponent{
     public Color edgeColor = new Color(100, 100, 100, 50);
     public Color selectedColor = new Color(255, 170, 0, 100);
 
+    // Todo: use Main.mouseMovements
     @Override
     public void render(Vector2D mouse) {
         // see InputHistory.java

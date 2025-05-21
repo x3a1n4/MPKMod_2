@@ -188,7 +188,6 @@ public class LandingBlock {
                 // Use the rendering expansion amount as an epsilon
                 boolean onBlock = lastPlayerBB.minY() <= boundingBox.maxY() && lastPlayerBB.minY() > (boundingBox.maxY() - 2 * RENDER_EXPANSION_AMOUNT);
 
-                // API.LOGGER.info(API.DISCORD_RPC_MARKER, String.format("Is jumping: %s %s %s", keyInput.jump , onGround , onBlock));
                 return keyInput.jump && onGround && onBlock;
             case OBSTACLE:
                 // We only return true on "tight" passes
@@ -196,8 +195,6 @@ public class LandingBlock {
                 Vector2D side = boundingBox.getXZSide(playerBB);
                 Vector2D lastSide = boundingBox.getXZSide(lastPlayerBB);
                 Vector2D lastLastSide = boundingBox.getXZSide(lastLastPlayerBB);
-
-                API.LOGGER.info(API.DISCORD_RPC_MARKER, String.format("Side: %s %s %s", side , lastSide , lastLastSide));
 
                 // X facing check
                 // flip lastSide to -, + corner (so that we are going around the bottom right

@@ -35,6 +35,7 @@ public class Timing {
         return result;
     }
 
+    // What is any of this for
     private Match startsWithMatch(List<TimingInput> inputList) {
         HashMap<String, TickMS> vars = new HashMap<>();
         int startIndex = 0;

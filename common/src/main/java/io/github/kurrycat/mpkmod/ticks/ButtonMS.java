@@ -44,7 +44,9 @@ public class ButtonMS {
                 "}";
     }
 
+    // This is probably where it gets the timings?
     public Integer msFrom(ButtonMS before) {
+        // break here?
         return (int) ((nanos - before.nanos) / 1_000_000D);
     }
 

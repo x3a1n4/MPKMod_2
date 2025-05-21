@@ -6,6 +6,7 @@ import io.github.kurrycat.mpkmod.gui.components.Button;
 import io.github.kurrycat.mpkmod.gui.components.Component;
 import io.github.kurrycat.mpkmod.gui.components.PopupMenu;
 import io.github.kurrycat.mpkmod.gui.components.*;
+import io.github.kurrycat.mpkmod.gui.components.UniversalInputDisplay.UniversalInputDisplay;
 import io.github.kurrycat.mpkmod.gui.interfaces.KeyInputListener;
 import io.github.kurrycat.mpkmod.gui.interfaces.MouseInputListener;
 import io.github.kurrycat.mpkmod.gui.interfaces.MouseScrollListener;

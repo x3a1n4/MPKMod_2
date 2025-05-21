@@ -81,6 +81,7 @@ public class TimingEntry {
                     vars.get(varName).tickCount += range.constrain(i);
                 else vars.put(varName, new Timing.TickMS(range.constrain(i)));
 
+                // What is this?
                 vars.get(varName).ms = getMS(
                         startIndex + i - vars.get(varName).tickCount,
                         vars.get(varName).tickCount,
@@ -129,6 +130,7 @@ public class TimingEntry {
         if (range == null)
             return null;
 
+        // This is where we actually get the things
         ButtonMS startMS = curr.get(0).msList.forKey(range.getFirst());
         if (startMS == null) return null;
         ButtonMS endMS = after.msList.forKey(range.getSecond());

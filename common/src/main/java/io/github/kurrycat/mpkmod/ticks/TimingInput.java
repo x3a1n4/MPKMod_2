@@ -39,6 +39,7 @@ public class TimingInput implements Copyable<TimingInput> {
         return new TimingInput(false, false, false, false, false, false, false, true);
     }
 
+    // What is this for?
     public static Tuple<ButtonMS.Button, ButtonMS.Button> findMSButtons(TimingInput before, TimingInput after, List<TimingInput> curr) {
         boolean[] befInputs = before.inputBoolList();
         boolean[] aftInputs = after.inputBoolList();

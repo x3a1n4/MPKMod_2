@@ -8,6 +8,7 @@ import io.github.kurrycat.mpkmod.events.*;
 import io.github.kurrycat.mpkmod.gui.TickThread;
 import io.github.kurrycat.mpkmod.gui.components.Component;
 import io.github.kurrycat.mpkmod.gui.components.InputHistory;
+import io.github.kurrycat.mpkmod.gui.components.UniversalInputDisplay.UniversalInputDisplay;
 import io.github.kurrycat.mpkmod.gui.infovars.InfoString;
 import io.github.kurrycat.mpkmod.gui.infovars.InfoTree;
 import io.github.kurrycat.mpkmod.gui.screens.LandingBlockGuiScreen;
@@ -112,6 +113,9 @@ public class Main implements MPKModule {
                             );
                         }
                     }
+                    // Note: only runs once every tick
+
+                    // API.LOGGER.info("KeyPress: {}", Keyboard.getPressedButtons());
                 }, Event.EventType.KEY_INPUT));
 
         EventAPI.addListener(EventAPI.EventListener.onTickStart(e -> API.tickTime++));
@@ -144,6 +148,8 @@ public class Main implements MPKModule {
                                 }
                             }
                             Profiler.endSection();
+
+                            //API.LOGGER.info("Render GUI");
                         }
                 )
         );
@@ -156,6 +162,8 @@ public class Main implements MPKModule {
                             Profiler.startSection("renderLBOverlays");
                             LandingBlockGuiScreen.lbs.forEach(lb -> lb.render(e.partialTicks));
                             Profiler.endSection();
+
+                            //API.LOGGER.info("Render World");
                         },
                         Event.EventType.RENDER_WORLD_OVERLAY
                 )
@@ -175,6 +183,8 @@ public class Main implements MPKModule {
                             }
                             Profiler.endSection();
 
+                            UniversalInputDisplay.onTickEnd(); // static, why not
+                            //API.LOGGER.info("Tick end");
                         }
                 )
         );

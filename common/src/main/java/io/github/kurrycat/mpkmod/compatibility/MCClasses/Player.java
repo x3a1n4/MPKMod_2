@@ -85,6 +85,7 @@ public class Player {
 
     }
 
+    // This is where the timing inputs are coalesced
     public static List<TimingInput> getInputHistory() {
         return tickHistory.stream().map(p -> p.timingInput).collect(Collectors.toList());
     }
@@ -219,6 +220,7 @@ public class Player {
 
     @SuppressWarnings("UnusedReturnValue")
     public Player buildAndSave() {
+        // called every tick
         Player prev = getLatest();
         Player pprev = getBeforeLatest();
         Player.savePlayerState(this);
@@ -261,7 +263,7 @@ public class Player {
                 onGround
         );
         if (keyMSList != null)
-            timingInput.msList.addAll(keyMSList);
+            timingInput.msList.addAll(keyMSList); // we create a new list each time? That can't be right
 
         if (prev.jumpTick && !prev.keyInput.isMovingSideways() && keyInput.isMovingSideways()) {
             last45 = prev.deltaYaw;
