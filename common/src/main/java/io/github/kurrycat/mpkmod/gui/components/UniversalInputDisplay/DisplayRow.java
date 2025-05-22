@@ -26,20 +26,15 @@ public class DisplayRow{
         // duplicate from UniversalInputDisplay, ah well
         List<TimingInput> inputHistory = Player.getInputHistory();
 
-        int tickIndex = -1;
-        // TODO: iterate backwards
-        for (TimingInput input : inputHistory){
-            tickIndex++;
-            if (parent.tickIndexToRelativeX(tickIndex) <= 0) continue;
-
-            if (getPressedFromButton(input, this.button)){
-                // On ground, draw rect in background!
+        for (int tickIndex = inputHistory.size() - 1; parent.tickIndexToRelativeX(tickIndex) > 0; tickIndex--){
+            if (tickIndex == 0) break;
+            if (getPressedFromButton(inputHistory.get(tickIndex), this.button)){
+                // TODO: make it look nicer
                 Renderer2D.drawRect(
                         parent.getDisplayedPos().add(parent.tickIndexToRelativeX(tickIndex), verticalIndex * height),
                         new Vector2D(parent.TICK_WIDTH, height),
                         this.tickFillColor);
             }
-            tickIndex += 1;
         }
     }
 

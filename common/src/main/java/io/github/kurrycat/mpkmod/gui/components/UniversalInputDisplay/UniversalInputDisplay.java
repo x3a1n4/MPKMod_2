@@ -35,7 +35,7 @@ public class UniversalInputDisplay extends ResizableComponent {
     public Color selectedColor = new Color(255, 170, 0, 100);
 
     @JsonProperty
-    public double TICK_WIDTH = 0.1;
+    double TICK_WIDTH = 0.1;
 
     public static final long NANOS_PER_TICK = (long) 50e6;
 
@@ -65,7 +65,7 @@ public class UniversalInputDisplay extends ResizableComponent {
                 new NumberSlider(0.1,
                         10,
                         0.1, TICK_WIDTH, Vector2D.OFFSCREEN, new Vector2D(56, 11), sliderValue -> {
-                    TICK_WIDTH = (int) sliderValue;
+                    TICK_WIDTH = sliderValue;
                 })
         );
         menu.addComponent(
@@ -99,35 +99,27 @@ public class UniversalInputDisplay extends ResizableComponent {
         // Get tick times, in nanos
 
         // Render tickLines
-        for (int tickIndex = Player.maxSavedTicks; tickIndexToRelativeX(tickIndex) > 0; tickIndex--){
-            // add slight buffer
+        for (int tickIndex = inputHistory.size() - 1; tickIndexToRelativeX(tickIndex) > 0; tickIndex--){
+            // add slight external overdraw
             Renderer2D.drawLine(
-                    pos.add(tickIndexToRelativeX(tickIndex), -1),
-                    pos.add(tickIndexToRelativeX(tickIndex), size.getY() + 1),
+                    cpos.add(tickIndexToRelativeX(tickIndex), -1),
+                    cpos.add(tickIndexToRelativeX(tickIndex), size.getY() + 1),
                     tickLineColor);
         }
 
-        // Render ground (G)
-        // Note: render left to right
-
-        int tickIndex = -1;
-        // TODO: iterate backwards
-        for (TimingInput input : inputHistory){
-            tickIndex++;
-
-            if (tickIndexToRelativeX(tickIndex) <= 0) continue;
-            if (input == null) continue;
-
-            if (input.G){
+        // Render Ground
+        for (int tickIndex = inputHistory.size() - 1; tickIndexToRelativeX(tickIndex) > 0; tickIndex--){
+            if (tickIndex == 0) break; //
+            if (inputHistory.get(tickIndex).G){ // Note: G can just be null on tick 0
                 // On ground, draw rect in background!
                 // TODO: make it look nicer
-                Renderer2D.drawRect(pos.add(tickIndexToRelativeX(tickIndex), 0), new Vector2D(TICK_WIDTH, size.getY()), onGroundColour);
+                Renderer2D.drawRect(cpos.add(tickIndexToRelativeX(tickIndex), 0), new Vector2D(TICK_WIDTH, size.getY()), onGroundColour);
             }
         }
 
         // Render rows
         int drIndex = 0;
-        double rowHeight = size.getY() / displayRows.size();
+        double rowHeight = csize.getY() / displayRows.size();
         for (DisplayRow dr : displayRows){
             dr.render(this, drIndex, rowHeight);
             drIndex++;
@@ -138,8 +130,8 @@ public class UniversalInputDisplay extends ResizableComponent {
     }
 
     public int nanoToRelativeX(long nanos){
-        int out = (int) (size.getX() - (double) (renderTime - nanos) / NANOS_PER_TICK * TICK_WIDTH);
-        API.LOGGER.info("out: {}", out); // Holds inputs, snapped to ticks
+        int out = (int) (csize.getX() - (double) (renderTime - nanos) / NANOS_PER_TICK * TICK_WIDTH);
+        //API.LOGGER.info("out: {}", out); // Holds inputs, snapped to ticks
         return Math.max(out, 0); // limit to 0
     }
 
@@ -147,7 +139,7 @@ public class UniversalInputDisplay extends ResizableComponent {
     public int tickIndexToRelativeX(int tickIndex){
         // Note: index is backwards!
         int out = nanoToRelativeX(lastTickNano - NANOS_PER_TICK * (Player.maxSavedTicks - tickIndex));
-        API.LOGGER.info("in: {}, out: {}", tickIndex, out); // Holds inputs, snapped to ticks
+        //API.LOGGER.info("in: {}, out: {}", tickIndex, out); // Holds inputs, snapped to ticks
         return out;
     }
 
